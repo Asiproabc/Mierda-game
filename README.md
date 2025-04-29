@@ -1,0 +1,124 @@
+import time
+
+# Diccionario de reglas reorganizado
+reglas = {
+    "Puntaje": [
+        "Se denomina punto cuando la pelota bota dos o más veces en el suelo, sin que el jugador que ha recibido el bote en su campo la toque."
+    ],
+    "Objetivo del Juego": [
+        "El objetivo del juego es no eliminarse e intentar subir a la posición más alta (el Rey)."
+    ],
+    "El Campo": [
+        "El área está delimitada por líneas blancas.",
+        "No se permite salir del campo con el balón.",
+        "El campo se divide en zonas: defensa, medio y ataque."
+    ],
+    "Material": [
+        "Se necesita una pelota de tenis para jugar.",
+        "Está permitido el uso de guantes."
+    ],
+    "Posiciones": {
+        "Nombres": [
+            "Mierda",
+            "Sota",
+            "Caballo",
+            "Rey",
+            "Reserva"
+        ],
+        "Posición que ocupan en el campo": [
+            "Mierda: en la zona de ataque.",
+            "Sota: en el centro del campo.",
+            "Caballo: en la defensa.",
+            "Rey: en el centro de la defensa.",
+            "Reserva: Fuera del campo sin pisar la línea de juego, dejando aproximadamente un metro de espacio, pero sin salirse de los cuadrados de reserva."
+        ],
+        "Rol": [
+            "Mierda: No eliminarse, ya que es la posición más baja.",
+            "Sota: Recibir el saque de Rey.",
+            "Caballo: Intentar subir a Rey.",
+            "Rey: Aguantar en esa posición, ya que es la posición más alta.",
+            "Reserva: Esperar a que Mierda se elimine para salir en su lugar."
+        ]
+    },
+    "Reglas de Tiempo": [
+        "La hora de llegada es a las 11:17, quien llega después de este minuto (11:18) pierde su posición del día anterior y se va a última reserva.",
+        "El juego se acaba cuando suena el segundo timbre, pero se deja terminar la jugada que hay en curso. Lo que no se puede es empezar una jugada nueva."
+    ],
+    "Excepciones": [
+        "En caso de discusión o jugada dudosa, se repite el punto.",
+        "Si el balón se pincha o daña durante la jugada, la jugada se repite desde el saque original.",
+        "Si un jugador es interrumpido por una causa externa (como una pelota de otro juego), la jugada se anula y se repite."
+    ],
+    "Bote": [
+        "La pelota se puede golpear con una sola mano.",
+        "Para que el golpe sea válido, tiene que botar en el campo del jugador que golpea y luego dentro del de otro jugador."
+    ]
+}
+
+# Agrupación para mostrar el menú organizado
+grupos = {
+    "Reglas Generales": ["Puntaje", "Objetivo del Juego"],
+    "Reglas de Juego": ["El Campo", "Material"],
+    "Posiciones y Roles": ["Posiciones"],
+    "Horarios": ["Reglas de Tiempo"],
+    "Excepciones": ["Excepciones"],
+    "Bote": ["Bote"]
+}
+
+def mostrar_reglas(categoria):
+    """Muestra las reglas de una categoría seleccionada con mejor formato."""
+    if categoria in reglas:
+        print("\n" + "=" * 40)
+        print(f"{categoria.upper()}")
+        print("=" * 40)
+
+        if isinstance(reglas[categoria], dict):  # Para categorías con subcategorías
+            for subcat, contenido in reglas[categoria].items():
+                print(f"\n{subcat}:")
+                for regla in contenido:
+                    print(f"  - {regla}")
+        else:
+            for regla in reglas[categoria]:
+                print(f"  - {regla}")
+    else:
+        print("Categoría no encontrada. Por favor, elige otra.")
+
+def menu():
+    """Menú principal para que los jugadores elijan la categoría de reglas."""
+    while True:
+        print("\n--- Bienvenido al sistema de reglas del juego ---")
+        print("Elige una categoría para consultar:")
+
+        categorias_planas = []
+        opcion = 1
+
+        for grupo, items in grupos.items():
+            print(f"\n--- {grupo} ---")
+            for item in items:
+                print(f"{opcion}. {item}")
+                categorias_planas.append(item)
+                opcion += 1
+
+        print(f"{opcion}. Salir")
+
+        time.sleep(3)
+
+        try:
+            eleccion = int(input("\nIngresa el número de la categoría: "))
+            if 1 <= eleccion <= len(categorias_planas):
+                categoria_seleccionada = categorias_planas[eleccion - 1]
+                mostrar_reglas(categoria_seleccionada)
+            elif eleccion == len(categorias_planas) + 1:
+                print("\n¡Gracias por usar el sistema de reglas! ¡Que disfrutes el juego!")
+                break
+            else:
+                print("Opción no válida. Inténtalo nuevamente.")
+
+            print("\n--- Volviendo al menú principal...")
+            time.sleep(2)
+
+        except ValueError:
+            print("Por favor, ingresa un número válido.")
+
+# Ejecutamos el menú
+menu()
